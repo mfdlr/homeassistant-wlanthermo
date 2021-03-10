@@ -31,12 +31,25 @@ sensor:
 # Template sensor per channel
 - platform: template
   sensors:
+    # Wifi signal strength
+    wlanthermo_signal_strength:
+      value_template: "{{ state_attr('sensor.wlanthermo', 'system')['rssi'] }}"
+      unit_of_measurement: "dBm"
+      friendly_name: "WLANThermo signal strength"
+      device_class: signal_strength
+      entity_id: sensor.wlanthermo
+
     # Channel 1
     wlanthermo_channel_1_all:
       value_template: "{{ state_attr('sensor.wlanthermo', 'channel')[0] }}"
       entity_id: sensor.wlanthermo
     wlanthermo_channel_1:
-      friendly_name: "Kanal 1"
+      friendly_name_template: >
+          {% if not is_state('sensor.wlanthermo', 'unknown') %}
+          {{ state_attr('sensor.wlanthermo', 'channel')[0]['name'] }}
+          {% else %}
+          Channel 1
+          {% endif %}
       # set to zero if wlanthermo is turned off or channel not plugged in
       value_template: >
           {% if not is_state('sensor.wlanthermo', 'unknown') %}
@@ -58,7 +71,12 @@ sensor:
       value_template: "{{ state_attr('sensor.wlanthermo', 'channel')[1] }}"
       entity_id: sensor.wlanthermo
     wlanthermo_channel_2:
-      friendly_name: "Kanal 2"
+      friendly_name_template: >
+          {% if not is_state('sensor.wlanthermo', 'unknown') %}
+          {{ state_attr('sensor.wlanthermo', 'channel')[1]['name'] }}
+          {% else %}
+          Channel 1
+          {% endif %}
       # set to zero if wlanthermo is turned off or channel not plugged in
       value_template: >
           {% if not is_state('sensor.wlanthermo', 'unknown') %}
@@ -86,28 +104,28 @@ Now we need to define input_number elements, so that we are able to control a sl
 ```yaml
 input_number:
   wlanthermo_channel_1_min:
-      name: Kanal 1 min
+      name: Channel 1 min
       min: 0
       max: 100
       step: 1
       unit_of_measurement: °C
       icon: mdi:thermometer
   wlanthermo_channel_1_max:
-      name: Kanal 1 max
+      name: Channel 1 max
       min: 0
       max: 150
       step: 1
       unit_of_measurement: °C
       icon: mdi:thermometer
   wlanthermo_channel_2_min:
-      name: Kanal 2 min
+      name: Channel 2 min
       min: 0
       max: 100
       step: 1
       unit_of_measurement: °C
       icon: mdi:thermometer
   wlanthermo_channel_2_max:
-      name: Kanal 2 max
+      name: Channel 2 max
       min: 0
       max: 150
       step: 1
