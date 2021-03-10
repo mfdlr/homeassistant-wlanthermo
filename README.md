@@ -212,58 +212,57 @@ In the automations you have to define how to set the defined input_number elemen
 ![Screenshot Lovelace UI WLANThermo](/screenshot.png?raw=true "WLANThermo Lovelace")
 
 ```yaml
-- badges: []
-  cards:
-    - entities:
-        - entity: sensor.wlanthermo
-      type: entities
-    - entities:
-        - sensor.wlanthermo_channel_1
-        - sensor.wlanthermo_channel_2
-      title: Temperaturverlauf
-      type: history-graph
-    - card:
-        cards:
+  - title: Thermometer
+    icon: 'mdi:pig'
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.wlanthermo
+      - type: history-graph
+        entities:
           - entity: sensor.wlanthermo_channel_1
-            max: 100
-            min: 0
-            severity:
-              green: 0
-              red: 0
-              yellow: 0
-            theme: Backend-selected
-            type: gauge
-            unit: °C
-          - entities:
-              - input_number.wlanthermo_channel_1_min
-              - input_number.wlanthermo_channel_1_max
-            type: entities
-        type: vertical-stack
-      conditions:
-        - entity: sensor.wlanthermo_channel_1
-          state_not: '0'
-      type: conditional
-    - card:
-        cards:
           - entity: sensor.wlanthermo_channel_2
-            max: 100
-            min: 0
-            severity:
-              green: 0
-              red: 0
-              yellow: 0
-            theme: Backend-selected
-            type: gauge
-            unit: °C
-          - entities:
-              - input_number.wlanthermo_channel_2_min
-              - input_number.wlanthermo_channel_2_max
-            type: entities
-        type: vertical-stack
-      conditions:
-        - entity: sensor.wlanthermo_channel_2
-          state_not: '0'
-      type: conditional
-  icon: 'mdi:pig'
-  title: Thermometer
+        title: Temperaturverlauf
+      - type: conditional
+        conditions:
+          - entity: sensor.wlanthermo_channel_1
+            state_not: '0'
+          - entity: sensor.wlanthermo_channel_1
+            state_not: unavailable
+        card:
+          type: vertical-stack
+          cards:
+            - type: gauge
+              entity: sensor.wlanthermo_channel_1
+              min: 0
+              max: 250
+              severity:
+                green: 90
+                yellow: 115
+                red: 200
+            - type: entities
+              entities:
+                - entity: input_number.wlanthermo_channel_1_min
+                - entity: input_number.wlanthermo_channel_1_max
+      - type: conditional
+        conditions:
+          - entity: sensor.wlanthermo_channel_2
+            state_not: '0'
+          - entity: sensor.wlanthermo_channel_2
+            state_not: unavailable
+        card:
+          type: vertical-stack
+          cards:
+            - type: gauge
+              entity: sensor.wlanthermo_channel_2
+              min: 0
+              max: 100
+              severity:
+                green: 0
+                yellow: 0
+                red: 0
+            - type: entities
+              entities:
+                - entity: input_number.wlanthermo_channel_2_min
+                - entity: input_number.wlanthermo_channel_2_max
 ```
