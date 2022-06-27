@@ -14,21 +14,22 @@ First we add a sensor containing all information, battery status as master value
 Adjust your MQTT topic appropriately, so change the topic prefix `WLanThermo/NANO-2a21b5` to your modelname.
 
 ```yaml
-sensor:
+mqtt:
 # Basic sensor, read everything from MQTT
-- platform: mqtt
-  name: "WLANThermo"
-  # change topic to your modelname!
-  state_topic: "WLanThermo/NANO-2a21b5/status/data"
-  value_template: "{{ value_json.system.soc }}"
-  # change topic to your modelname!
-  json_attributes_topic: "WLanThermo/NANO-2a21b5/status/data"
-  json_attributes_template: "{{ value_json | tojson }}"
-  device_class: battery
-  unit_of_measurement: "%"
-  expire_after: 60
+  sensor:
+    - name: "WLANThermo"
+      # change topic to your modelname!
+      state_topic: "WLanThermo/NANO-2a21b5/status/data"
+      value_template: "{{ value_json.system.soc }}"
+      # change topic to your modelname!
+      json_attributes_topic: "WLanThermo/NANO-2a21b5/status/data"
+      json_attributes_template: "{{ value_json | tojson }}"
+      #device_class: battery
+      #unit_of_measurement: "%"
+      expire_after: 60
 
 # Template sensor per channel
+sensor:
 - platform: template
   sensors:
     # Wifi signal strength
