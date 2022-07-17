@@ -237,11 +237,18 @@ In the automations you have to define how to set the defined input_number elemen
       - type: entities
         entities:
           - entity: sensor.wlanthermo
-      - type: history-graph
-        entities:
+      - type: conditional
+        conditions:
           - entity: sensor.wlanthermo_channel_1
+            state_not: unavailable
           - entity: sensor.wlanthermo_channel_2
-        title: Temperaturverlauf
+            state_not: unavailable
+        card:
+          - type: history-graph
+            title: Temperaturverlauf
+            entities:
+              - entity: sensor.wlanthermo_channel_1
+              - entity: sensor.wlanthermo_channel_2
       - type: conditional
         conditions:
           - entity: sensor.wlanthermo_channel_1
